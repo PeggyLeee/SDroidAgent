@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.ncu.sdroidagent"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="21" />
+
+    <!-- Permission -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<permission
+        android:name="com.ncu.sdroidagent.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.ncu.sdroidagent.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        
+        <!-- Google Play Services -->
+        <meta-data android:name="com.google.android.gms.version"
+    		android:value="@integer/google_play_services_version" />
+        
+        <!-- Activity -->
+        <activity android:name="com.ncu.sdroidagent.MainActivity" 
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name="com.ncu.sdroidagent.LockScreenActivity" />
+
+        <!-- BroadcastReceiver -->
+        <receiver android:name="com.ncu.sdroidagent.PackageReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".StartupReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="StartupReceiver_Manual_Start" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name = ".CheckRunningAppReceiver"/>
+        
+        <receiver
+            android:name="com.google.android.gcm.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <!-- Receives the actual messages. -->
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <!-- Receives the registration id. -->
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+                <category android:name="com.ncu.sdroidagent" />
+            </intent-filter>
+        </receiver>
+        
+        <!-- Service -->
+        <service android:enabled="true" android:name="com.ncu.sdroidagent.IntentService"></service>
+        <service android:enabled="true" android:name="com.ncu.sdroidagent.AppLockService"></service>
+        <service android:name="com.ncu.sdroidagent.GCMIntentService" />
+               
+    </application>
+
+</manifest>
